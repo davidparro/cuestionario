@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 	function comprobarNIF($dato) {
 		// echo " Valor: ", constant('ERR_LETRA');  // si es visible
 		$digContr = "TRWAGMYFPDXBNJZSQVHLCKE";
@@ -59,5 +59,7 @@
 		return false;
 	}
 	
-	// function validarEmail () --> filter_var('bob@example.com', FILTER_VALIDATE_EMAIL);
+	 function validarEmail (){
+         filter_var('bob@example.com', FILTER_VALIDATE_EMAIL);
+     } 
 ?>
