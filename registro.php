@@ -17,13 +17,16 @@
 		&nbsp;&nbsp;&nbsp;<input class="enviar" type="reset" value="Borrar datos"/></p>
 	    </fieldset>
 	</form>
+<?php include_once ("./inc/defines.inc.php"); ?>
 <?php include_once ("./inc/funciones.inc.php"); ?>
+
 <?php
 	if (isset($_REQUEST['envio2'])) {
 		if (empty($_REQUEST['nif']) || empty($_REQUEST['nombre']) || empty($_REQUEST['clave'])) {
 			echo "<p>Debe rellenar todos los campos requeridos</p>";
 		} else {
 			$nif=$_REQUEST['nif'];
+			validarNif($nif);
 			$clave=$_REQUEST['clave'];
 			$nombre=str_pad($_REQUEST['nombre'],30);
 

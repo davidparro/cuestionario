@@ -1,5 +1,5 @@
 <?php
-	function comprobarNIF($dato) {
+	/*function comprobarNIF($dato) {
 		// echo " Valor: ", constant('ERR_LETRA');  // si es visible
 		$digContr = "TRWAGMYFPDXBNJZSQVHLCKE";
 		$expresionReg ='/^[0-9]{7,8}[a-z]{1}$/i';
@@ -20,23 +20,41 @@
 		} else { 
 			return ERR_VACIO;
 		}
-	}
-		
+	}*/
+
 	function validarNif($nif) {
-		if (strlen($nif)!=9) {
+		if (strlen($nif)>9) {
 			return false;
 		}
-		$numero=substr($nif,0,8);
-		$letra=substr($nif,8);
-		$letra=strtoupper($letra);
+		$numero=substr($nif,0,strlen($nif-1));
+		$letra=strtoupper(substr($nif,strlen($nif-1)));
+		//$letra=strtoupper($letra);
 		$letras="TRWAGMYFPDXBNJZSQVHLCKE";
 		if (!is_numeric($numero)) {
+			echo "<p>ER mal</p>";
 			return false;
 		}
 		if ($letra!=substr($letras,$numero%23,1)) {
 			echo "<p>La letra no se corresponde con el DNI</p>";
-			return false;
+			return false;//
 		}
+
+		if (file_exists(MyFILE)) {
+
+				$lineasFichero = file(MyFILE, FILE_IGNORE_NEW_LINES);
+				for ($i=0; $i < sizeof($lineasFichero); $i++) { 
+					$empresas[] = explode('*',$lineasFichero[$i]);											
+				}	
+				for ($j=0; $j < sizeof($empresas); $j++) { 
+					if ($nif == $empresas[$j][0]) {
+						echo "NIF existe";
+					return false;//NIF existente en el archivo
+					}
+				}
+		}else{
+			echo "no existe<a href=".MyFILE.">link</a>";
+		}
+
 		return true;
 	}
 		
