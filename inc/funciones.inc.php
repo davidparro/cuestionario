@@ -108,9 +108,19 @@
         }
     }
 
-    function obtenerRespuestas(array[datos]){
+    function obtenerRespuestas($datos,$nif){
+        //David
         /*obtenerRespuestas(array[datos]){}Guardamos en un array las respuestas del test y se
         comparan con el array de respuestas correctas para tener la nota. Llama a validarNota para
         guardarla.*/
+        include_once ("./inc/correcion.inc.php");
+        $puntuacion=0;
+        for($i=0;$i<$correctas.length;$i++){
+            if($datos[$i]==$correctas[$i]){
+                $puntuacion++;
+            }
+        }
+        validarNota($puntuacion,$nif);
+        
     }
 ?>
