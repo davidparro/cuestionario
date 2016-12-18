@@ -82,6 +82,7 @@
      } 
 
     function accesoTest($nif,$clave){
+        //David
         /*true(1), si no tiene nota. false(-1) usuario no existe. False (-2)
             clave incorrecta. False(-3) si ya tiene nota.*/
         if (file_exists("./registro.dat.php")) {
