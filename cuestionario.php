@@ -7,15 +7,22 @@
 </head>
 
 <body>
-<?php include_once ("./inc/correcion.inc.php"); ?>
-<?php
-$prueba=true;
+<?php 
+require_once("./inc/funciones.inc.php");
+require_once("./inc/define.inc.php");
+$prueba=false;
 if (empty($_REQUEST['nif']) || empty($_REQUEST['clave'])) {
 	echo "<h2>Dni o clave vacíos</h2>";
 	$prueba=false;
 } else {
 	$nif=$_REQUEST['nif'];
 	$clave=$_REQUEST['clave'];
+	echo accesoTest($nif,$clave);
+	if(accesoTest($nif,$clave)==1){
+		$prueba=true;
+	} else {
+		$prueba=false;
+	}
 
 	
 	

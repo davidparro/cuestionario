@@ -43,10 +43,10 @@
 
 				$lineasFichero = file(MyFILE, FILE_IGNORE_NEW_LINES);
 				for ($i=0; $i < sizeof($lineasFichero); $i++) { 
-					$empresas[] = explode('*',$lineasFichero[$i]);											
+					$usuarios[] = explode('*',$lineasFichero[$i]);											
 				}	
-				for ($j=0; $j < sizeof($empresas); $j++) { 
-					if ($nif == $empresas[$j][0]) {
+				for ($j=0; $j < sizeof($usuarios); $j++) { 
+					if ($nif == $usuarios[$j][0]) {
 						echo "NIF existe";
 					return false;//NIF existente en el archivo
 					}
@@ -85,15 +85,15 @@
         //David
         /*true(1), si no tiene nota. false(-1) usuario no existe. False (-2)
             clave incorrecta. False(-3) si ya tiene nota.*/
-        if (file_exists("./registro.dat.php")) {
-            $lineasFichero = file("./registro.dat.php", FILE_IGNORE_NEW_LINES);
+        if (file_exists(MyFILE)) {
+            $lineasFichero = file(MyFILE, FILE_IGNORE_NEW_LINES);
             for ($i=0; $i < sizeof($lineasFichero); $i++) { 
                 $usuarios[] = explode('*',$lineasFichero[$i]);									
             }
 
             for ($j=0; $j < sizeof($usuarios); $j++) { 
-                if ($usuario == $usuarios[$j][0] && $clave == $usuarios[$j][1]) {
-                    if($usuarios[$j][3]== "-"){
+                if ($nif == $usuarios[$j][0] && $clave == $usuarios[$j][1]) {
+                    if($usuarios[$j][4] == "Sin nota"){
                         return 1; //usuario es correcto
                     }else{
                         return -3; //Si ya tiene nota puesta
@@ -123,4 +123,59 @@
         validarNota($puntuacion,$nif);
         
     }
+     function registrarUsuario($nif,$clave,$nombreape,$email,$fecha){
+     	$email = (empty($email))?"Sin email":$email;
+		
+		$fichero = fopen(MyFILE, "a+");
+		fwrite($fichero,"$nif*$clave*$nombreape*$email*Sin nota*$fecha\n");
+		fclose($fichero);
+		return true;
+	
+     }
+     function cambiarNota($nif,$nuevaNota){
+     	$nif = strtoupper($nif);
+     	$cambiado = false;
+     	if ($nuevaNota < MAX_NOTA){
+     		if (file_exists(MyFILE)) {
+				$fichero = fopen(MyFILE, "r");
+				$nuevoFichero = [];
+				while (!feof($fichero)) {
+					$leerLinea = fgets($fichero);
+					$resultados = explode("*", $leerLinea);
+					if (strtoupper($resultados[0]) == $nif && trim($resultados[4]) == "Sin nota"){
+						$resultados[4] = $nuevaNota;
+						$cambiado = true;
+					}
+					$leerLinea = implode("*", $resultados);
+					//Revisar lineas en blanco
+					if (!empty($leerLinea)){
+						array_push($nuevoFichero, $leerLinea);
+					}
+				}
+				fclose($fichero);
+				if (!$cambiado){
+					echo "<p>No hay ningun registro con $nif o se encuentra con una nota ya asignada</p>";
+					return false;
+				}
+				editarFichero($nuevoFichero);
+				return true;
+			}else{
+				echo "<p>No existe el archivo <a href=".MyFILE.">link</a></p>";
+				return false;
+			}
+     	}else{
+     		echo "<p>Nota incorrecta</p>";
+     		return false;
+     	}
+     }
+     function editarFichero($nuevoFichero){
+     	if (file_exists(MyFILE)) {
+     		$fichero = fopen(MyFILE, "w");
+     		$numeroLineas = count($nuevoFichero);
+     		for ($i=0; $i < $numeroLineas; $i++) { 
+     			fwrite($fichero, $nuevoFichero[$i] . "\n");
+     		}
+     		fclose($fichero);
+     	}
+     }
 ?>
